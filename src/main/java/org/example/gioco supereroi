@@ -1,0 +1,98 @@
+// Interfaccia per definire il comportamento dei personaggi
+interface Personaggio {
+    int getForzaFisica(); // Metodo per ottenere la forza fisica del personaggio
+    void attacca(); // Metodo per attaccare
+}
+
+// Classe astratta per definire caratteristiche comuni
+abstract class PersonaggioBase implements Personaggio {
+    protected int forzaFisica; // Variabile per la forza fisica del personaggio
+    
+    public int getForzaFisica() {
+        return forzaFisica; // Restituisce la forza fisica del personaggio
+    }
+}
+
+// Classe per gli Umani
+abstract class Umano extends PersonaggioBase {
+    public Umano() {
+        this.forzaFisica = 10; // Imposta la forza iniziale a 10 per gli Umani
+    }
+    
+    public void combatti() {
+        this.forzaFisica -= 3; // Riduce la forza di 3 ad ogni combattimento
+    }
+}
+
+// Classe per gli Extraterrestri
+abstract class Extraterrestre extends PersonaggioBase {
+    public Extraterrestre() {
+        this.forzaFisica = 15; // Imposta la forza iniziale a 15 per gli Extraterrestri
+    }
+    
+    public void azzanna() {
+        this.forzaFisica -= 2; // Riduce la forza di 2 ad ogni azzanno
+    }
+}
+
+// Classe SuperEroe, solo umano
+class SuperEroe extends Umano {
+    @Override
+    public void attacca() {
+        combatti(); // SuperEroe combatte riducendo la forza di 3
+    }
+}
+
+// Classe Vampiro, solo extraterrestre
+class Vampiro extends Extraterrestre {
+    @Override
+    public void attacca() {
+        azzanna(); // Vampiro azzanna riducendo la forza di 2
+    }
+}
+
+// Classe Licantropo, cambia tipo a seconda della luna piena
+class Licantropo extends PersonaggioBase {
+    private boolean lunaPiena; // Indica se è notte di luna piena
+    
+    public Licantropo(boolean lunaPiena) {
+        this.lunaPiena = lunaPiena; // Imposta la condizione della luna
+        this.forzaFisica = lunaPiena ? 15 : 10; // Imposta la forza in base alla luna
+    }
+    
+    @Override
+    public void attacca() {
+        if (lunaPiena) {
+            this.forzaFisica -= 2; // Riduce la forza di 2 se è luna piena
+        } else {
+            this.forzaFisica -= 3; // Riduce la forza di 3 se non è luna piena
+        }
+    }
+}
+
+// Classe principale per il gioco
+public class Videogioco {
+    public static void main(String[] args) {
+        // Creazione degli oggetti SuperEroe, Vampiro e Licantropo
+        SuperEroe superEroe = new SuperEroe();
+        Vampiro vampiro = new Vampiro();
+        Licantropo licantropo = new Licantropo(false); // Non è notte di luna piena
+
+        // SuperEroe combatte 3 volte
+        superEroe.attacca();
+        superEroe.attacca();
+        superEroe.attacca();
+
+        // Vampiro azzanna una volta
+        vampiro.attacca();
+
+        // Licantropo combatte 2 volte
+        licantropo.attacca();
+        licantropo.attacca();
+
+        // Stampa delle forze fisiche rimanenti
+        System.out.println("Forza SuperEroe: " + superEroe.getForzaFisica()); // Stampa la forza del SuperEroe
+        System.out.println("Forza Vampiro: " + vampiro.getForzaFisica()); // Stampa la forza del Vampiro
+        System.out.println("Forza Licantropo: " + licantropo.getForzaFisica()); // Stampa la forza del Licantropo
+    }
+}
